@@ -1,0 +1,108 @@
+---
+title: "decipher project 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+_____________________________________________________________________________________
+
+Introduction: From recent studies, 10(Z)-hexadecenoic has been shown to have anti-inflammatory properties in Mice. Without PPARα, the researchers did not observe a decrease in lipopolysaccharide-stimulated secretion of IL-6-a molecule important for the activation of immune response. In this study, we will be analyzing the PPARα protein in humans vs mice to see if they share a similar PPARα protein.
+
+Study: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6626661/
+
+Scientific Question: Was Mice a good model to use to see if 10(Z)-hexadecenoic acid has anti-inflammatory properties in Humans?
+
+Scientific Hypothesis: If the sequence of the PPARα protein is the same/similar in Mice and Human, then mice was a good model to use to see if 10(Z)-hexadecenoic has anti-inflammatory properties in Humans?
+
+Here we perform a protein sequence alignment to see how similar the PPARA protein is in Mice and in Humans to answer our scientific queestion
+
+_____________________________________________________________________________________
+
+Below are the packages that are being used to perform the protein sequence alignment. BiocManger is used to install and manage packages from Bioconductor. DECIPHER is a subpackage of Bioconductor used to aligned DNA, RNA or AA sequences. Here we will be aligning AA sequences using the DECIPHER package:
+
+1) BiocManager-https://cran.r-project.org/web/packages/BiocManager/vignettes/BiocManager.html
+2) DECIPHER-http://www2.decipher.codes/AlignSequences.html
+
+_____________________________________________________________________________________
+
+To complete the alignement, we must install and load our packages using the command below:
+
+```{r}
+#command to load BiocManager so that we may install and library DECIPHER package to complete alignment 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+ BiocManager::install("DECIPHER")
+ #the below command is to load DECIPHER to our work space
+ library(DECIPHER)
+```
+
+_____________________________________________________________________________________
+
+The code below is to specify the path to the FASTA file we are aligning: 
+
+```{r}
+#The below command is used to define the variabes and to provide R with the files to align
+ fas_mouse <- "Mouse_ppara.fasta"
+ fas_human <- "Human_ppara.fasta"
+```
+
+The fasta files were retrieved from the Uniport database:
+https://www.uniprot.org/uniprot/Q07869.fasta
+https://www.uniprot.org/uniprot/P23204.fasta
+
+_____________________________________________________________________________________
+
+The next command loads the sequences from the file:
+
+```{r}
+#Here we are loading the sequence to our work space for alignment
+ seqs_mouse <- readAAStringSet(fas_mouse)
+ seqs_human <- readAAStringSet(fas_human)
+```
+
+_____________________________________________________________________________________
+
+In the next command, we are completing the performing the alignment where were are comparing the amino acid sequence between the two protein to see where the amino acid change. 
+
+```{r}
+#The below code is used to aligned our Human PPARA and Mouse PPARA protein sequence
+aligned <- AlignSeqs(seqs)
+```
+_____________________________________________________________________________________
+
+In the final command, we visualizing the alignment results on a web browser:
+
+```{r}
+# The last line of this command is to display our results on browser
+BrowseSeqs(aligned, highlight=0)
+```
+
+_____________________________________________________________________________________
+
+Analysis of Results: Form the sequence alignment we can see that the two protein sequences is pretty similar with the exception of Human PPARA protein isoform = X3/X2 which seems to be the most different form the Mouse PPARA protein. From the alignment result we are able to see that PPARA Mouse protein and Human PPARA protein isoform = X1 is identical. As a result we can conclude that Mice was a good model to use to see if 10(Z)-hexadecenoic acid has anti-inflammatory properties in Humans since they share the similar PPARA proteins needed for 10(Z)-hexadecenoic acid to cause a anti-inflammatory response. 
+ 
+ 
+ 
+ 
